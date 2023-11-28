@@ -9,17 +9,14 @@ public class FileReader {
 
     public Profile getDataFromFile(File file) {
         try (java.io.FileReader in = new java.io.FileReader(file)){
-            String profileLine;
-            String[] buffer = new String[4];
+            String profileString;
+            char[] buffer = new char[128];
+            in.read(buffer);
+            profileString = new String(buffer);
+            String[] profileData = profileString.split("\\s+");
 
-            try (BufferedReader br = new BufferedReader(in)) {
-                for(int i = 0; (profileLine = br.readLine()) != null; i++){
-                    buffer[i] = profileLine.split("\\s")[1];
-                }
-            }
-
-            return new Profile(buffer[0], Integer.parseInt(buffer[1]),
-                    buffer[2], Long.parseLong(buffer[3]));
+            return new Profile(profileData[1], Integer.parseInt(profileData[3]),
+                    profileData[5], Long.parseLong(profileData[7]));
         } catch (IOException e){
             e.printStackTrace();
         }
